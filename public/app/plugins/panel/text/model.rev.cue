@@ -1,0 +1,9 @@
+package "text" // ?? package name == pluginId?  (typically: $org-name-$type)
+
+revisions:
+  1: ...
+  2: ...
+  3: ...
+
+?????
+
