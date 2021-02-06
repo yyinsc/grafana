@@ -88,8 +88,13 @@ export class GraphiteQueryCtrl extends QueryCtrl {
       return Promise.resolve();
     }
 
+    const options = {
+      range: this.panelCtrl.range,
+      requestId: 'check-other-segments',
+    };
+
     return this.datasource
-      .metricFindQuery(path)
+      .metricFindQuery(path, options)
       .then((segments: any) => {
         if (segments.length === 0) {
           if (path !== '' && modifyLastSegment) {
