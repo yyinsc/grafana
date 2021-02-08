@@ -9,6 +9,7 @@ import { promiseToDigest } from 'app/core/utils/promiseToDigest';
 import { auto } from 'angular';
 import { TemplateSrv } from 'app/features/templating/template_srv';
 import { AppEvents } from '@grafana/data';
+import { getTimeSrv, TimeSrv } from 'app/features/dashboard/services/TimeSrv';
 
 const GRAPHITE_TAG_OPERATORS = ['=', '!=', '=~', '!=~'];
 const TAG_PREFIX = 'tag: ';
@@ -29,7 +30,8 @@ export class GraphiteQueryCtrl extends QueryCtrl {
     $injector: auto.IInjectorService,
     private uiSegmentSrv: any,
     private templateSrv: TemplateSrv,
-    $timeout: any
+    $timeout: any,
+    private readonly timeSrv: TimeSrv = getTimeSrv()
   ) {
     super($scope, $injector);
     this.supportsTags = this.datasource.supportsTags;
@@ -89,7 +91,7 @@ export class GraphiteQueryCtrl extends QueryCtrl {
     }
 
     const options = {
-      range: this.panelCtrl.range,
+      range: this.timeSrv.timeRange(),
       requestId: 'check-other-segments',
     };
 
@@ -126,8 +128,9 @@ export class GraphiteQueryCtrl extends QueryCtrl {
     if (index > 0) {
       query = this.queryModel.getSegmentPathUpTo(index) + '.' + query;
     }
+
     const options = {
-      range: this.panelCtrl.range,
+      range: this.timeSrv.timeRange(),
       requestId: 'get-alt-segments',
     };
 
